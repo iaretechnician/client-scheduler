@@ -99,7 +99,7 @@ This allows replacing JSON with MySQL later without rewriting page logic.
 ## Development admin login
 
 - Username: `admin`
-- Password: set in `config/shop.php` (`admin.password`)
+- Password: default is `change-me-now` and is configured via `config/shop.php` (`admin.password_hash`)
 
 > **Security note:** For production, use a password hash and environment variables.
 

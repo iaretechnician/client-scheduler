@@ -35,7 +35,7 @@ if (is_post()) {
         <label>Password <input type="password" name="password" required></label>
         <button type="submit">Sign In</button>
     </form>
-    <p class="small">Default development password is <code>change-me-now</code>. Change the hash in <code>/config/shop.php</code> immediately.</p>
+    <p class="small">Default development password is <code>change-me-now</code>. Change <code>admin.password_hash</code> in <code>/config/shop.php</code> immediately.</p>
 </main>
 </body>
 </html>
