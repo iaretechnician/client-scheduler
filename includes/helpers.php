@@ -20,7 +20,8 @@ function sanitize_email(?string $value): string
 
 function sanitize_phone(?string $value): string
 {
-    return preg_replace('/[^0-9+]/', '', (string) $value) ?? '';
+    $result = preg_replace('/[^0-9+]/', '', (string) $value);
+    return is_string($result) ? $result : '';
 }
 
 function redirect_to(string $url): void
@@ -51,7 +52,8 @@ function now_iso(): string
 
 function mask_phone(string $phone): string
 {
-    $clean = preg_replace('/\D/', '', $phone) ?? '';
+    $result = preg_replace('/\D/', '', $phone);
+    $clean = is_string($result) ? $result : '';
     if (strlen($clean) < 4) {
         return '***';
     }

@@ -29,7 +29,6 @@ $next = $waitingOnly[0] ?? null;
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="30">
     <title>Queue Display</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>

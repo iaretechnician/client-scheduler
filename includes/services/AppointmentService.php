@@ -79,7 +79,8 @@ final class AppointmentService
     {
         $appointmentTime = sanitize_string($input['appointment_time'] ?? '');
         $barber = sanitize_string($input['preferred_barber'] ?? 'Any');
-        if (!$this->isSlotAvailable($appointmentTime, $barber)) {
+        $serviceKey = sanitize_string($input['service'] ?? '');
+        if (!$this->isSlotAvailable($appointmentTime, $barber, $serviceKey)) {
             throw new RuntimeException('Selected time slot is not available.');
         }
 
@@ -109,7 +110,7 @@ final class AppointmentService
         return $entry;
     }
 
-    public function isSlotAvailable(string $appointmentTime, string $preferredBarber = 'Any'): bool
+    public function isSlotAvailable(string $appointmentTime, string $preferredBarber = 'Any', string $requestedService = 'haircut'): bool
     {
         if ($appointmentTime === '') {
             return false;
@@ -144,7 +145,7 @@ final class AppointmentService
 
             $existingDuration = max(5, (int) ($appointment['service_duration'] ?? $this->config['default_appointment_length']));
             $existingEnd = $existingStart->modify('+' . $existingDuration . ' minutes');
-            $requestedDuration = max(5, (int) ($services['haircut']['duration'] ?? $this->config['default_appointment_length']));
+            $requestedDuration = max(5, (int) ($services[$requestedService]['duration'] ?? $this->config['default_appointment_length']));
             $requestedEnd = $start->modify('+' . $requestedDuration . ' minutes');
 
             $overlap = $start < $existingEnd && $existingStart < $requestedEnd;
