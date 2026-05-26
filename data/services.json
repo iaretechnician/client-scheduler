@@ -1,0 +1,18 @@
+{
+  "haircut": {
+    "label": "Haircut",
+    "duration": 30
+  },
+  "beard_trim": {
+    "label": "Beard Trim",
+    "duration": 15
+  },
+  "haircut_beard": {
+    "label": "Haircut + Beard",
+    "duration": 45
+  },
+  "kids_cut": {
+    "label": "Kids Cut",
+    "duration": 25
+  }
+}
