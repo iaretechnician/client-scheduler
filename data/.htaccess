@@ -1,0 +1,2 @@
+# Deny all direct requests into /data
+Require all denied

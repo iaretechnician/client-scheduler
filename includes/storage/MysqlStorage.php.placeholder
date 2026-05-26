@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+// Placeholder for future MySQL-backed implementation.
+// This class should implement StorageInterface and map queue/appointments/customers/settings
+// records to normalized MySQL tables.
+
+final class MysqlStorage implements StorageInterface
+{
+    public function __construct(private PDO $pdo)
+    {
+    }
+
+    // TODO: Implement methods from StorageInterface using prepared statements.
+}
