@@ -1,0 +1,67 @@
+name: Deploy via SSH + rsync
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start ssh-agent and add private key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          # Required secret: SSH_PRIVATE_KEY
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known_hosts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy files with rsync
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          # Required repository secrets to configure later:
+          # SSH_HOST, SSH_USER, SSH_PRIVATE_KEY, SSH_PORT, DEPLOY_PATH
+          # Intentionally no --delete so server-side /data is not removed.
+          rsync -az --progress \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='README.md' \
+            --exclude='.DS_Store' \
+            --exclude='*.tmp' \
+            --exclude='*.swp' \
+            ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
+
+      - name: Set safe permissions on server (optional)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -p "${SSH_PORT:-22}" "${SSH_USER}@${SSH_HOST}" << 'EOF'
+            set -e
+            # Keep this safe and minimal.
+            find "${DEPLOY_PATH}" -type d -exec chmod 755 {} \;
+            find "${DEPLOY_PATH}" -type f -exec chmod 644 {} \;
+
+            # If web files must be owned by www-data:www-data, configure your deploy user
+            # with limited passwordless sudo for this specific chown command only.
+            # Example (server-side sudoers):
+            # deploy ALL=(root) NOPASSWD: /bin/chown -R www-data:www-data /var/www/client-scheduler
+            # Then you can enable the next line:
+            # sudo -n chown -R www-data:www-data "${DEPLOY_PATH}"
+          EOF

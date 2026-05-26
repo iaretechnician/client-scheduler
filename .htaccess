@@ -1,0 +1,10 @@
+# Basic hardening
+Options -Indexes
+
+# Prevent direct file access to JSON/log data files.
+RewriteEngine On
+RewriteRule ^data/ - [F,L]
+
+<FilesMatch "\.(json|log)$">
+    Require all denied
+</FilesMatch>
