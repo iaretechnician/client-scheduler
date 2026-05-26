@@ -12,7 +12,7 @@ final class JsonStorage implements StorageInterface
     {
         $this->dataPath = rtrim($dataPath, '/');
         if (!is_dir($this->dataPath)) {
-            mkdir($this->dataPath, 0750, true);
+            mkdir($this->dataPath, 0700, true);
         }
 
         $this->ensureFile('queue.json', []);

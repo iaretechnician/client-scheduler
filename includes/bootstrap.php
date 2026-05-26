@@ -9,8 +9,11 @@ if (session_status() === PHP_SESSION_NONE) {
 $config = require __DIR__ . '/../config/shop.php';
 
 $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'development'));
-if ($appEnv === 'production' && (($config['admin']['password'] ?? '') === 'change-me-now')) {
-    throw new RuntimeException('Default admin password is not allowed in production. Update config/shop.php.');
+if (
+    $appEnv === 'production'
+    && (($config['admin']['password_hash'] ?? '') === '$2y$10$aH9OsgokbPPVQVsZzbG0eeOxL35WsuYsIFXwCOtf3PAiTEDvDTHHa')
+) {
+    throw new RuntimeException('Default admin password hash is not allowed in production. Update config/shop.php.');
 }
 
 require_once __DIR__ . '/helpers.php';

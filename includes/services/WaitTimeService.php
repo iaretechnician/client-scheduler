@@ -16,11 +16,15 @@ final class WaitTimeService
 
         $queueMinutes = 0;
         foreach ($queue as $entry) {
-            if (!in_array($entry['status'] ?? 'waiting', ['waiting', 'notified', 'arrived'], true)) {
+            $status = $entry['status'] ?? 'waiting';
+            if (!in_array($status, ['waiting', 'notified', 'arrived', 'in_chair'], true)) {
                 continue;
             }
 
             $duration = $this->serviceDuration($entry['service'] ?? '', $services, (int) ($entry['service_duration'] ?? 0));
+            if ($status === 'in_chair') {
+                $duration = max(5, (int) ceil($duration / 2));
+            }
             $party = max(1, (int) ($entry['party_size'] ?? 1));
             $queueMinutes += $duration * $party;
         }

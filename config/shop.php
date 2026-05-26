@@ -16,8 +16,9 @@ return [
     'active_barbers' => 2,
     'admin' => [
         'username' => 'admin',
-        // Development-only credential. Use a password hash and env vars in production.
-        'password' => 'change-me-now',
+        // Development-only hash for password: change-me-now
+        // Replace with your own hash from password_hash('your-password', PASSWORD_DEFAULT).
+        'password_hash' => '$2y$10$aH9OsgokbPPVQVsZzbG0eeOxL35WsuYsIFXwCOtf3PAiTEDvDTHHa',
     ],
     'sms' => [
         'provider' => 'logger', // Placeholder: swap with twilio or another provider later.

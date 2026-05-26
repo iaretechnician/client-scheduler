@@ -10,17 +10,17 @@ function is_admin_logged_in(): bool
 function admin_login(string $username, string $password, array $config): bool
 {
     $expectedUser = (string) ($config['admin']['username'] ?? '');
-    $expectedPass = (string) ($config['admin']['password'] ?? '');
+    $expectedPassHash = (string) ($config['admin']['password_hash'] ?? '');
 
     if (!hash_equals($expectedUser, $username)) {
         return false;
     }
 
-    // Development mode supports plain-text config password.
-    // Production should use password_hash() and password_verify().
-    $isValid = str_starts_with($expectedPass, '$2y$')
-        ? password_verify($password, $expectedPass)
-        : hash_equals($expectedPass, $password);
+    if ($expectedPassHash === '') {
+        return false;
+    }
+
+    $isValid = password_verify($password, $expectedPassHash);
 
     if ($isValid) {
         $_SESSION['admin_logged_in'] = true;
