@@ -69,6 +69,6 @@ final class WaitTimeService
             return $fallback;
         }
 
-        return max(5, (int) ($services[$serviceKey]['duration'] ?? $fallback ?: 30));
+        return max(5, (int) ($services[$serviceKey]['duration'] ?? 30));
     }
 }

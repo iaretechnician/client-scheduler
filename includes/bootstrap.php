@@ -8,6 +8,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $config = require __DIR__ . '/../config/shop.php';
 
+$appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'development'));
+if ($appEnv === 'production' && (($config['admin']['password'] ?? '') === 'change-me-now')) {
+    throw new RuntimeException('Default admin password is not allowed in production. Update config/shop.php.');
+}
+
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/storage/StorageInterface.php';
