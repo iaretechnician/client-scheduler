@@ -23,6 +23,7 @@ final class WaitTimeService
 
             $duration = $this->serviceDuration($entry['service'] ?? '', $services, (int) ($entry['service_duration'] ?? 0));
             if ($status === 'in_chair') {
+                // Simple assumption: if already in chair, about half of service time remains.
                 $duration = max(5, (int) ceil($duration / 2));
             }
             $party = max(1, (int) ($entry['party_size'] ?? 1));

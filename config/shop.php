@@ -16,8 +16,8 @@ return [
     'active_barbers' => 2,
     'admin' => [
         'username' => 'admin',
-        // Development-only hash for password: change-me-now
-        // Replace with your own hash from password_hash('your-password', PASSWORD_DEFAULT).
+        // Development-only hash for password: change-me-now.
+        // Replace this before production. bootstrap.php blocks this default hash in APP_ENV=production.
         'password_hash' => '$2y$10$aH9OsgokbPPVQVsZzbG0eeOxL35WsuYsIFXwCOtf3PAiTEDvDTHHa',
     ],
     'sms' => [

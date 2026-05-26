@@ -60,6 +60,8 @@ jobs:
             # Keep this safe and minimal.
             find "${DEPLOY_PATH}" -type d -exec chmod 755 {} \;
             find "${DEPLOY_PATH}" -type f -exec chmod 644 {} \;
+            # Tighten config file permissions if present.
+            [ -f "${DEPLOY_PATH}/config/shop.php" ] && chmod 640 "${DEPLOY_PATH}/config/shop.php" || true
 
             # If web files must be owned by www-data:www-data, configure your deploy user
             # with limited passwordless sudo for this specific chown command only.
